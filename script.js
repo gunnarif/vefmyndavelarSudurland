@@ -65,10 +65,36 @@ var cameraModule = (function () {
 		{
 			v.view.src = cameras[select.selectedIndex].url;
 			view.cameraId = select.selectedIndex;
+			setStorage(view.id, view.cameraId);
 		}
 	};
 	
-	var setView = function (element, select, cameraId) {
+	var getStorage = function(viewId) {
+		if (window.localStorage) {
+			var cameraId = window.localStorage.getItem("view" + viewId);
+			if (cameraId) {
+				return Number(cameraId);
+			}
+		} 
+		switch(viewId) {
+			case 1: return 10;
+			case 2: return 13;
+			case 3: return 16;
+			case 4: return 19;
+			case 5: return 24;
+			case 6: return 34;
+		}		
+	}
+	
+	var setStorage = function(viewId, cameraId) {
+		if (window.localStorage) {
+			window.localStorage.setItem("view"+viewId, cameraId)
+		}
+	}
+	
+	var setView = function (element, select, viewId) {
+		var cameraId = getStorage(viewId);
+		
 		element.src = cameras[cameraId].url;
 
 		for (var i = 0; i < cameras.length ; i++) {
@@ -79,7 +105,7 @@ var cameraModule = (function () {
 			select.appendChild(opt);
 		}
 		
-		var view = {view:element,cameraId:cameraId};
+		var view = {id: viewId, view:element,cameraId:cameraId};
 		
 		select.onchange = onCameraChange(view, select); 		
 		
@@ -116,12 +142,12 @@ document.body.onload = function () {
 	var option5 = document.getElementById("option5");
 	var option6 = document.getElementById("option6");
 
-	cameraModule.setView(view1, option1, 10);
-	cameraModule.setView(view2, option2, 13);
-	cameraModule.setView(view3, option3, 16);
-	cameraModule.setView(view4, option4, 19);
-	cameraModule.setView(view5, option5, 24);
-	cameraModule.setView(view6, option6, 34);
+	cameraModule.setView(view1, option1, 1);
+	cameraModule.setView(view2, option2, 2);
+	cameraModule.setView(view3, option3, 3);
+	cameraModule.setView(view4, option4, 4);
+	cameraModule.setView(view5, option5, 5);
+	cameraModule.setView(view6, option6, 6);
 }
 
 
